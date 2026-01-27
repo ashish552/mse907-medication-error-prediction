@@ -1,0 +1,9 @@
+﻿.venv/
+__pycache__/
+*.pyc
+data/raw/
+data/processed/
+*.zip
+.ipynb_checkpoints/
+.vscode/
+.DS_Store
