@@ -4,6 +4,7 @@ from pathlib import Path
 BASE = Path("data/raw/mimic_demo_2.2")
 
 def get_dataset_root(base: Path) -> Path:
+    # data/raw/mimic_demo_2.2 might contain nested folder
     if (base / "hosp").exists() or (base / "icu").exists():
         return base
     for c in base.iterdir():
@@ -30,10 +31,10 @@ def main():
     print("admissions:", len(admissions), "| unique hadm_id:", admissions["hadm_id"].nunique())
     print("prescriptions:", len(prescriptions), "| unique hadm_id:", prescriptions["hadm_id"].nunique())
 
-    print("\n--- Key columns preview (first 20 cols) ---")
-    print("patients cols:", list(patients.columns)[:20])
-    print("admissions cols:", list(admissions.columns)[:20])
-    print("prescriptions cols:", list(prescriptions.columns)[:20])
+    print("\n--- Columns (first 25) ---")
+    print("patients:", list(patients.columns)[:25])
+    print("admissions:", list(admissions.columns)[:25])
+    print("prescriptions:", list(prescriptions.columns)[:25])
 
 if __name__ == "__main__":
     main()
