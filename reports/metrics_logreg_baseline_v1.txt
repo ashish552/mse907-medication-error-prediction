@@ -1,0 +1,20 @@
+Logistic Regression Baseline (v1)
+AUROC: 0.9972
+AUPRC: 0.9932
+Precision: 0.8883
+Recall: 0.9910
+F1: 0.9368
+
+Confusion matrix [[TN FP],[FN TP]]:
+[[2348   83]
+ [   6  660]]
+
+Classification report:
+              precision    recall  f1-score   support
+
+           0       1.00      0.97      0.98      2431
+           1       0.89      0.99      0.94       666
+
+    accuracy                           0.97      3097
+   macro avg       0.94      0.98      0.96      3097
+weighted avg       0.97      0.97      0.97      3097
