@@ -1,9 +1,17 @@
-﻿.venv/
-__pycache__/
-*.pyc
+﻿
+# data
 data/raw/
 data/processed/
 *.zip
+*.csv
+
+# python
+.venv/
+__pycache__/
+*.pyc
+
+# notebooks
 .ipynb_checkpoints/
-.vscode/
-.DS_Store
+
+# models outputs (optional: keep if you don't want to push)
+# models/
