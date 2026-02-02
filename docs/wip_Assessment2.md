@@ -96,6 +96,20 @@ The project addresses these gaps:
   - bilirubin_total missing = 44.41%
 - Output file: `data/processed/base_rx_with_labs.csv`
 
+ Cleaning v2 (Week 7):
+- Saved: data/processed/model_dataset_clean_v1.csv
+- Rows: 18087 -> 15484
+- Duplicates removed (hadm_id, starttime, drug): 2603
+- Dose numeric coverage: 94.54%
+
+
+Data quality summary (Week 7):
+- Lab missingness: creatinine 17.93%, BUN 17.94%, ALT 45.20%, AST 40.80%, bilirubin_total 44.60%.
+- Top drugs by frequency include insulin (693), 0.9% sodium chloride (557), furosemide (462), heparin (261), vancomycin (239).
+- Polypharmacy distribution: median 26, 75% 37, max 80.
+- Dose numeric coverage: 94.54% non-missing; dose max outlier observed (8500).
+
+
 ### LO2.6 Evidence (console outputs)
 (These are copied from development logs.)
 
@@ -130,3 +144,4 @@ max         80.000000
 ✅ Added feature: bilirubin_total (missing=44.41%)
 
 ✅ Saved: data/processed/base_rx_with_labs.csv
+ 
