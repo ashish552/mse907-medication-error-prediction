@@ -145,3 +145,12 @@ max         80.000000
 
 ✅ Saved: data/processed/base_rx_with_labs.csv
  
+ Baseline Logistic Regression (v1) on proxy labels:
+- AUROC: 0.9972
+- AUPRC: 0.9932
+- Precision: 0.8883 | Recall: 0.9910 | F1: 0.9368
+- Confusion matrix [[TN FP],[FN TP]] = [[2348 83],[6 660]]
+Artifacts saved:
+- reports/metrics_logreg_baseline_v1.txt
+- reports/figures/confusion_matrix_logreg_baseline_v1.png
+

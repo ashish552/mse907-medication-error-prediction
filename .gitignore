@@ -15,3 +15,6 @@ __pycache__/
 
 # models outputs (optional: keep if you don't want to push)
 # models/
+models/
+*.joblib
+

@@ -1,0 +1,21 @@
+Logistic Regression GROUP Baseline (v1)
+Split: GroupShuffleSplit(hadm_id)
+AUROC: 0.9972
+AUPRC: 0.9900
+Precision: 0.9408
+Recall: 0.9835
+F1: 0.9617
+
+Confusion matrix [[TN FP],[FN TP]]:
+[[2355   30]
+ [   8  477]]
+
+Classification report:
+              precision    recall  f1-score   support
+
+           0       1.00      0.99      0.99      2385
+           1       0.94      0.98      0.96       485
+
+    accuracy                           0.99      2870
+   macro avg       0.97      0.99      0.98      2870
+weighted avg       0.99      0.99      0.99      2870
