@@ -14,7 +14,6 @@ __pycache__/
 .ipynb_checkpoints/
 
 # models outputs (optional: keep if you don't want to push)
-# models/
-models/
+
 *.joblib
 
