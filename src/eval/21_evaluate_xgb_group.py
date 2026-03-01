@@ -9,40 +9,23 @@ from sklearn.metrics import (
     confusion_matrix,
     classification_report
 )
+
 import matplotlib.pyplot as plt
 
-LOGREG_BUNDLE = Path("models/logreg_group_baseline_v1.joblib")
-RF_BUNDLE = Path("models/rf_group_v1.joblib")
-XGB_BUNDLE = Path("models/xgb_group_v1.joblib")
-
-METRICS_OUT = Path("reports/metrics_hybrid_ensemble_v1.txt")
-FIG_OUT = Path("reports/figures/confusion_matrix_hybrid_ensemble_v1.png")
+MODEL_IN = Path("models/xgb_group_v1.joblib")
+METRICS_OUT = Path("reports/metrics_xgb_group_v1.txt")
+FIG_OUT = Path("reports/figures/confusion_matrix_xgb_group_v1.png")
 
 def main():
-    for p in [LOGREG_BUNDLE, RF_BUNDLE, XGB_BUNDLE]:
-        if not p.exists():
-            raise FileNotFoundError(f"Missing model bundle: {p}")
+    if not MODEL_IN.exists():
+        raise FileNotFoundError(f"Model file not found: {MODEL_IN}. Run Step 20 first.")
 
-    # Load bundles
-    logreg = joblib.load(LOGREG_BUNDLE)
-    rf = joblib.load(RF_BUNDLE)
-    xgb = joblib.load(XGB_BUNDLE)
+    bundle = joblib.load(MODEL_IN)
+    model = bundle["model"]
+    X_test = bundle["X_test"]
+    y_test = bundle["y_test"]
 
-    # Use LogReg test set as the canonical test set
-    X_test = logreg["X_test"]
-    y_test = logreg["y_test"].astype(int)
-
-    m1 = logreg["model"]
-    m2 = rf["model"]
-    m3 = xgb["model"]
-
-    # Predict probabilities
-    p1 = m1.predict_proba(X_test)[:, 1]
-    p2 = m2.predict_proba(X_test)[:, 1]
-    p3 = m3.predict_proba(X_test)[:, 1]
-
-    # Soft voting: average probability
-    y_prob = (p1 + p2 + p3) / 3.0
+    y_prob = model.predict_proba(X_test)[:, 1]
     y_pred = (y_prob >= 0.5).astype(int)
 
     auroc = roc_auc_score(y_test, y_prob)
@@ -50,8 +33,8 @@ def main():
     prec, rec, f1, _ = precision_recall_fscore_support(y_test, y_pred, average="binary", zero_division=0)
     cm = confusion_matrix(y_test, y_pred)
 
-    print("=== Hybrid Ensemble (Soft Voting) v1 ===")
-    print("Models: LogReg + RF + XGBoost")
+    print("=== XGBoost GROUP (v1) ===")
+    print("Split:", bundle.get("split_type", "group"))
     print("AUROC:", round(auroc, 4))
     print("AUPRC:", round(auprc, 4))
     print("Precision:", round(prec, 4))
@@ -62,11 +45,10 @@ def main():
     print("\nClassification report:")
     print(classification_report(y_test, y_pred, zero_division=0))
 
-    # Save metrics
     METRICS_OUT.parent.mkdir(parents=True, exist_ok=True)
     with open(METRICS_OUT, "w", encoding="utf-8") as f:
-        f.write("Hybrid Ensemble (Soft Voting) v1\n")
-        f.write("Models: LogReg + RF + XGBoost\n")
+        f.write("XGBoost GROUP (v1)\n")
+        f.write(f"Split: {bundle.get('split_type', 'group')}\n")
         f.write(f"AUROC: {auroc:.4f}\n")
         f.write(f"AUPRC: {auprc:.4f}\n")
         f.write(f"Precision: {prec:.4f}\n")
@@ -78,11 +60,10 @@ def main():
         f.write("Classification report:\n")
         f.write(classification_report(y_test, y_pred, zero_division=0))
 
-    # Save confusion matrix figure
     FIG_OUT.parent.mkdir(parents=True, exist_ok=True)
     plt.figure()
     plt.imshow(cm)
-    plt.title("Confusion Matrix - Hybrid Ensemble v1")
+    plt.title("Confusion Matrix - XGBoost GROUP v1")
     plt.xlabel("Predicted")
     plt.ylabel("Actual")
     plt.xticks([0, 1], ["0", "1"])

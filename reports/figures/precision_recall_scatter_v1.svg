@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="700">
+<rect width="100%" height="100%" fill="white"/>
+<text x="450.0" y="34" text-anchor="middle" font-size="24" font-family="Arial">Precision vs Recall (Model Points)</text>
+<line x1="110" y1="70" x2="110" y2="610" stroke="black"/>
+<line x1="110" y1="610" x2="860" y2="610" stroke="black"/>
+<line x1="110.0" y1="70" x2="110.0" y2="610" stroke="#eee"/>
+<line x1="110" y1="610.0" x2="860" y2="610.0" stroke="#eee"/>
+<text x="110.0" y="630" text-anchor="middle" font-size="11" font-family="Arial">0.951</text>
+<text x="102" y="614.0" text-anchor="end" font-size="11" font-family="Arial">0.911</text>
+<line x1="297.5" y1="70" x2="297.5" y2="610" stroke="#eee"/>
+<line x1="110" y1="475.0" x2="860" y2="475.0" stroke="#eee"/>
+<text x="297.5" y="630" text-anchor="middle" font-size="11" font-family="Arial">0.965</text>
+<text x="102" y="479.0" text-anchor="end" font-size="11" font-family="Arial">0.934</text>
+<line x1="485.0" y1="70" x2="485.0" y2="610" stroke="#eee"/>
+<line x1="110" y1="340.0" x2="860" y2="340.0" stroke="#eee"/>
+<text x="485.0" y="630" text-anchor="middle" font-size="11" font-family="Arial">0.978</text>
+<text x="102" y="344.0" text-anchor="end" font-size="11" font-family="Arial">0.958</text>
+<line x1="672.5" y1="70" x2="672.5" y2="610" stroke="#eee"/>
+<line x1="110" y1="205.0" x2="860" y2="205.0" stroke="#eee"/>
+<text x="672.5" y="630" text-anchor="middle" font-size="11" font-family="Arial">0.992</text>
+<text x="102" y="209.0" text-anchor="end" font-size="11" font-family="Arial">0.981</text>
+<line x1="860.0" y1="70" x2="860.0" y2="610" stroke="#eee"/>
+<line x1="110" y1="70.0" x2="860" y2="70.0" stroke="#eee"/>
+<text x="860.0" y="630" text-anchor="middle" font-size="11" font-family="Arial">1.005</text>
+<text x="102" y="74.0" text-anchor="end" font-size="11" font-family="Arial">1.005</text>
+<circle cx="560.8" cy="438.0" r="6" fill="#d62728"/>
+<text x="568.8" y="430.0" font-size="12" font-family="Arial">LogReg (Group Split)</text>
+<circle cx="388.3" cy="98.7" r="6" fill="#d62728"/>
+<text x="396.3" y="90.7" font-size="12" font-family="Arial">Random Forest (Group Split)</text>
+<circle cx="790.4" cy="98.7" r="6" fill="#d62728"/>
+<text x="798.4" y="90.7" font-size="12" font-family="Arial">XGBoost (Group Split)</text>
+<circle cx="790.4" cy="110.7" r="6" fill="#d62728"/>
+<text x="798.4" y="102.7" font-size="12" font-family="Arial">Hybrid Ensemble (Weighted + Tuned + Fallback)</text>
+<text x="450.0" y="680" text-anchor="middle" font-size="14" font-family="Arial">Recall</text>
+<text x="24" y="350.0" transform="rotate(-90 24 350.0)" text-anchor="middle" font-size="14" font-family="Arial">Precision</text>
+</svg>

@@ -13,7 +13,7 @@ NAME_MAP = {
     "metrics_logreg_group_baseline_v1": "LogReg (Group Split)",
     "metrics_rf_group_v1": "Random Forest (Group Split)",
     "metrics_xgb_group_v1": "XGBoost (Group Split)",
-    "metrics_hybrid_ensemble_v1": "Hybrid Ensemble (Soft Voting)",
+    "metrics_hybrid_ensemble_v1": "Hybrid Ensemble (Weighted + Tuned + Fallback)",
 }
 
 OUT_CSV = Path("reports/model_comparison_v3.csv")
