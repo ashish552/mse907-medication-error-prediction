@@ -154,3 +154,222 @@ Artifacts saved:
 - reports/metrics_logreg_baseline_v1.txt
 - reports/figures/confusion_matrix_logreg_baseline_v1.png
 
+@@ -131,26 +131,218 @@ count    18087.000000
+mean        28.767070
+std         15.094545
+min          1.000000
+25%         17.000000
+50%         27.000000
+75%         38.000000
+max         80.000000
+
+✅ Filtered labevents rows: 7342
+✅ Added feature: creatinine (missing=17.55%)
+✅ Added feature: bun (missing=17.56%)
+✅ Added feature: alt (missing=44.97%)
+✅ Added feature: ast (missing=40.48%)
+✅ Added feature: bilirubin_total (missing=44.41%)
+
+✅ Saved: data/processed/base_rx_with_labs.csv
+ 
+ Baseline Logistic Regression (v1) on proxy labels:
+- AUROC: 0.9972
+- AUPRC: 0.9932
+- Precision: 0.8883 | Recall: 0.9910 | F1: 0.9368
+- Confusion matrix [[TN FP],[FN TP]] = [[2348 83],[6 660]]
+Artifacts saved:
+- reports/metrics_logreg_baseline_v1.txt
+- reports/figures/confusion_matrix_logreg_baseline_v1.png
+```
+
+### LO2.7 Detailed implementation log (what has been completed)
+
+This section documents each implemented script in execution order and what evidence/artifact it produced.
+
+#### A) Data pipeline scripts (`src/pipeline/`)
+
+1. `01_extract.py`
+   - Purpose: unpack and validate the MIMIC-IV demo dataset path.
+   - Outcome: dataset root confirmed and used in subsequent scripts.
+
+2. `02_list_files.py`
+   - Purpose: verify available tables and folder layout (`hosp/`, `icu/`).
+   - Outcome: key source files confirmed for admissions, prescriptions, labs, and ICU chart events.
+
+3. `03_load_core_tables.py`
+   - Purpose: load and profile core tables (`patients`, `admissions`, `prescriptions`).
+   - Outcome: baseline row counts captured and used to sanity-check joins.
+
+4. `04_build_base_rx_clean.py`
+   - Purpose: build the primary prescription-level dataset.
+   - Join logic: prescriptions linked to admissions and patient demographics.
+   - Cleaning done: datetime conversion, drug text normalization.
+   - Artifact: `data/processed/base_rx_clean.csv`.
+
+5. `05_add_polypharmacy.py`
+   - Purpose: compute concurrent active medication count at each prescription timestamp.
+   - Feature produced: `polypharmacy_active_meds`.
+   - Artifact: `data/processed/base_rx_polypharm.csv`.
+
+6. `06_fix_polypharmacy.py`
+   - Purpose: correction pass for edge cases in polypharmacy counting.
+   - Outcome: feature consistency improved before lab integration.
+
+7. `07_add_lab_features.py`
+   - Purpose: add latest prior labs before prescription time (anti-leakage design).
+   - Features added: `creatinine`, `bun`, `alt`, `ast`, `bilirubin_total`.
+   - Artifact: `data/processed/base_rx_with_labs.csv`.
+
+8. `08_clean_model_dataset.py`
+   - Purpose: final modeling table cleanup.
+   - Outcome: duplicate removal and better numeric readiness (e.g., `dose_val_rx_num`).
+   - Artifact: `data/processed/model_dataset_clean_v1.csv`.
+
+9. `09_data_quality_summary.py`
+   - Purpose: generate summary stats for missingness, top drugs, and feature distributions.
+   - Outcome: used for WIP report quality evidence and risk discussion.
+
+#### B) Labeling script (`src/labels/`)
+
+10. `10_create_proxy_labels_v1.py`
+   - Purpose: create binary high-risk proxy label because direct medication-error labels are unavailable in MIMIC-IV demo.
+   - Labeling basis: transparent rule-based safety logic (renal risk / medication context / polypharmacy conditions).
+   - Artifact dependency: labeling run on cleaned feature-rich dataset.
+
+#### C) Modeling scripts (`src/models/`)
+
+11. `11_train_logreg_baseline.py`
+   - Model: Logistic Regression baseline.
+   - Role: interpretable benchmark and baseline metric reference.
+
+13. `13_train_logreg_group_split.py`
+   - Model: Logistic Regression with `hadm_id` grouped splitting.
+   - Role: reduce admission-level leakage risk in validation.
+
+16. `16_train_rf_group_split.py`
+   - Model: Random Forest with grouped split.
+   - Role: non-linear ensemble benchmark.
+
+20. `20_train_xgb_group_split.py`
+   - Model: XGBoost with grouped split.
+   - Role: gradient boosting baseline for high performance.
+
+23. `23_train_xgb_mlp_stacking_group_split.py`
+   - Model: Hybrid stacking (`XGBoost + MLP`).
+   - Role: advanced ensemble to combine tree and neural representations.
+
+#### D) Evaluation and explainability scripts (`src/eval/`)
+
+12. `12_evaluate_baseline.py`
+   - Purpose: evaluate non-group baseline logistic regression.
+
+14. `14_evaluate_group_baseline.py`
+   - Purpose: evaluate grouped logistic baseline.
+
+15. `15_explain_logreg_coefficients.py`
+   - Purpose: coefficient-based interpretability for baseline model.
+
+17. `17_evaluate_rf_group.py`
+   - Purpose: grouped RF metrics and confusion matrix.
+
+18. `18_rf_feature_importance.py`
+   - Purpose: global feature importance plot for RF.
+
+19. `19_model_comparison_table_v1.py`
+   - Purpose: initial model comparison table generation (v1).
+
+21. `21_evaluate_xgb_group.py`
+   - Purpose: grouped XGBoost metrics and confusion matrix.
+
+22. `22_xgb_feature_importance.py`
+   - Purpose: global feature importance plot for XGBoost.
+
+24. `24_evaluate_xgb_mlp_stacking_group.py`
+   - Purpose: grouped evaluation for hybrid stacking model.
+
+25. `25_model_comparison_all_models_v3.py`
+   - Purpose: final combined model comparison and v3 reporting assets.
+
+### LO2.8 Consolidated results snapshot (current)
+
+- **LogReg baseline (non-group):** AUROC 0.9972, AUPRC 0.9932, F1 0.9368.
+- **LogReg group-split:** AUROC 0.9972, AUPRC 0.9900, F1 0.9617.
+- **Random Forest group-split:** AUROC 1.0000, AUPRC 1.0000, F1 0.9854.
+- **XGBoost group-split:** AUROC 1.0000, AUPRC 1.0000, F1 1.0000.
+- **XGB + MLP stacking group-split:** AUROC 1.0000, AUPRC 1.0000, F1 1.0000.
+
+Interpretation at WIP stage:
+- Group-based splitting improved methodological rigor compared to random split.
+- Very high/near-perfect scores are promising but require explicit leakage-risk discussion and robustness checks in final report.
+- Hybrid model currently matches top XGBoost performance on this dataset version.
+
+### LO2.9 Explainability and presentation progress
+
+- Implemented global explainability outputs:
+  - Logistic regression coefficients (`src/eval/15_explain_logreg_coefficients.py`)
+  - RF importance plot (`src/eval/18_rf_feature_importance.py`)
+  - XGBoost importance plot (`src/eval/22_xgb_feature_importance.py`)
+- Built a Streamlit demonstration app (`src/app/streamlit_demo_ui.py`) for:
+  - interactive probability prediction,
+  - threshold-based risk class adjustment,
+  - hybrid snapshot probabilities (xgb/mlp/final where available),
+  - local input-context explanation using median and standardized distance.
+
+### LO2.10 Artifacts produced and report readiness
+
+#### Metrics text artifacts
+- `reports/metrics_logreg_baseline_v1.txt`
+- `reports/metrics_logreg_group_baseline_v1.txt`
+- `reports/metrics_rf_group_v1.txt`
+- `reports/metrics_xgb_group_v1.txt`
+- `reports/metrics_xgb_mlp_stacking_group_v1.txt`
+
+#### Comparison report artifacts
+- `reports/model_comparison_v1.md`
+- `reports/model_comparison_v3.md`
+
+#### Figure artifacts (selected)
+- confusion matrices for baseline/group models,
+- RF and XGBoost feature importance plots,
+- model-comparison charts (bar/line/hbar/heatmap).
+
+These outputs demonstrate that the project has progressed from proposal-level planning to implementation, evaluation, and demo-level communication.
+
+---
+
+## LO3 (25%) – Current risks, limitations, and mitigation (WIP)
+
+### LO3.1 Key limitations currently acknowledged
+- **Proxy label limitation:** labels are rule-based surrogates, not directly observed medication-error events.
+- **Demo dataset size limitation:** MIMIC-IV demo is small, potentially making classification easier and less generalizable.
+- **Potential leakage concern:** near-perfect metrics require strong temporal and grouping validation discussion.
+- **Missingness limitation:** some liver-related labs remain highly missing (around 40–45%).
+
+### LO3.2 Mitigation already performed
+- Group-based split by admission (`hadm_id`) in major model runs.
+- “Latest prior lab” feature extraction to reduce look-ahead leakage.
+- Data cleaning and duplicate handling before training.
+
+### LO3.3 Planned mitigation before final submission
+- Add stronger robustness section: sensitivity to threshold, alternative split seeds, and calibration checks.
+- Add explicit leakage audit table in final report.
+- Include model-card style limitations and intended-use statement.
+
+---
+
+## LO4 (25%) – Remaining tasks and timeline to final submission
+
+### Week 8–9 (near-term)
+- Expand literature review with 4–8 journal sources and critical gap mapping.
+- Finalize methods narrative with reproducibility details.
+- Add explicit risk/ethics discussion (proxy labels, bias, deployment caution).
+
+### Week 9–10 (finalization)
+- Complete comparative discussion (why simple vs advanced models differ).
+- Strengthen explainability section with representative case examples.
+- Polish figures/tables and align all numbering with final report template.
+
+### Week 10+ (submission preparation)
+- Final consistency pass (metrics in text vs tables).
+- Presentation rehearsal using Streamlit demo and key evidence slides.
+- Package repository + report appendix with script-to-artifact mapping.
