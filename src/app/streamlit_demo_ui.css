@@ -1,0 +1,84 @@
+/* Strong, high-visibility theme overrides */
+:root {
+    --demo-bg-1: #eef4ff;
+    --demo-bg-2: #ffffff;
+    --demo-primary: #2f6fed;
+    --demo-primary-2: #4f8cff;
+    --demo-border: #cfe0ff;
+    --demo-text: #0f2747;
+}
+
+html,
+body,
+.stApp,
+[data-testid="stAppViewContainer"] {
+    background: linear-gradient(180deg, var(--demo-bg-1) 0%, #f6f9ff 35%, var(--demo-bg-2) 100%) !important;
+}
+
+h1,
+h2,
+h3,
+[data-testid="stMarkdownContainer"] h1,
+[data-testid="stMarkdownContainer"] h2,
+[data-testid="stMarkdownContainer"] h3 {
+    color: var(--demo-text) !important;
+    letter-spacing: 0.01em;
+}
+
+.block-container {
+    padding-top: 1.6rem !important;
+    padding-bottom: 2.6rem !important;
+    max-width: 980px !important;
+}
+
+div[data-testid="stSidebar"] {
+    border-right: 1px solid var(--demo-border) !important;
+    background: linear-gradient(180deg, #f7faff 0%, #edf4ff 100%) !important;
+}
+
+div[data-testid="stMetric"] {
+    border: 1px solid var(--demo-border) !important;
+    border-radius: 12px !important;
+    padding: 0.75rem !important;
+    background-color: #f7faff !important;
+    box-shadow: 0 4px 12px rgba(17, 63, 117, 0.1) !important;
+}
+
+div[data-testid="stForm"] {
+    border: 1px solid var(--demo-border) !important;
+    border-radius: 14px !important;
+    padding: 1rem 1rem 0.6rem !important;
+    background-color: #ffffff !important;
+    box-shadow: 0 10px 24px rgba(17, 63, 117, 0.1) !important;
+}
+
+/* Inputs */
+[data-baseweb="input"] > div,
+[data-baseweb="select"] > div,
+[data-baseweb="textarea"] > div {
+    border-color: #c3d8ff !important;
+    border-radius: 10px !important;
+}
+
+.stButton > button,
+div[data-testid="stFormSubmitButton"] button {
+    border-radius: 999px !important;
+    border: 0 !important;
+    background: linear-gradient(90deg, var(--demo-primary) 0%, var(--demo-primary-2) 100%) !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    padding: 0.5rem 1.35rem !important;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.stButton > button:hover,
+div[data-testid="stFormSubmitButton"] button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(47, 111, 237, 0.35) !important;
+}
+
+div[data-testid="stExpander"] {
+    border: 1px solid var(--demo-border) !important;
+    border-radius: 10px !important;
+    background: #ffffffcc !important;
+}

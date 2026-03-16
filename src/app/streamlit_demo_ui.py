@@ -14,6 +14,10 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+try:
+    from streamlit import html as st_html
+except ImportError:  # older Streamlit versions
+    st_html = None
 
 DEFAULT_MODEL_PATH = Path("models/xgb_mlp_stacking_group_v1.joblib")
 DEFAULT_DATA_PATH = Path("data/processed/model_dataset_labeled_v1.csv")
@@ -31,6 +35,23 @@ DEFAULT_NUMERIC_FEATURES = [
 DEFAULT_CATEGORICAL_FEATURES = ["drug", "gender", "admission_type"]
 
 st.set_page_config(page_title="Medication Error Risk Demo", layout="centered")
+
+CSS_PATH = Path(__file__).with_name("streamlit_demo_ui.css")
+
+
+def inject_custom_css() -> None:
+    if not CSS_PATH.exists():
+        st.warning(f"Stylesheet not found: {CSS_PATH}")
+        return
+
+    css_content = CSS_PATH.read_text(encoding="utf-8")
+    style_block = f"<style>{css_content}</style>"
+
+    # Prefer st.html when available (newer Streamlit), fallback to markdown for compatibility.
+    if st_html is not None:
+        st_html(style_block)
+    else:
+        st.markdown(style_block, unsafe_allow_html=True)
 
 
 @st.cache_resource
@@ -166,6 +187,7 @@ def try_base_probabilities(pipeline_model, X_input: pd.DataFrame):
 
 
 def main():
+    inject_custom_css()
     st.title("Medication Error Risk Prediction (Demo UI)")
     st.write(
         "Interactive prototype that loads your trained **Hybrid Stacking model (XGBoost + MLP)** "
