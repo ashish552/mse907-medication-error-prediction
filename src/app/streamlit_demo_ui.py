@@ -84,6 +84,41 @@ def risk_band(prob: float) -> str:
         return "Medium"
     return "High"
 
+def render_risk_indicator(prob: float, threshold: float) -> None:
+    prob_pct = max(0.0, min(prob * 100.0, 100.0))
+    threshold_pct = max(0.0, min(threshold * 100.0, 100.0))
+    band = risk_band(prob).lower()
+
+    indicator_html = f"""
+    <div class="risk-indicator-card">
+        <div class="risk-indicator-header">
+            <span class="risk-indicator-title">Risk indicator line</span>
+            <span class="risk-indicator-band risk-indicator-band-{band}">{risk_band(prob)} risk</span>
+        </div>
+        <div class="risk-indicator-scale">
+            <div class="risk-indicator-fill risk-indicator-fill-{band}" style="width: {prob_pct:.2f}%;"></div>
+            <div class="risk-indicator-threshold" style="left: {threshold_pct:.2f}%;">
+                <span class="risk-indicator-threshold-line"></span>
+                <span class="risk-indicator-threshold-label">Threshold {threshold:.2f}</span>
+            </div>
+            <div class="risk-indicator-marker" style="left: {prob_pct:.2f}%;">
+                <span class="risk-indicator-dot"></span>
+                <span class="risk-indicator-value">{prob:.2%}</span>
+            </div>
+        </div>
+        <div class="risk-indicator-labels">
+            <span>Low risk</span>
+            <span>High risk</span>
+        </div>
+    </div>
+    """
+
+    if st_html is not None:
+        st_html(indicator_html)
+    else:
+        st.markdown(indicator_html, unsafe_allow_html=True)
+
+
 
 def get_dropdowns(df: pd.DataFrame, top_n_drugs: int = 200) -> Dict[str, List[str]]:
     out = {"drug": [], "gender": [], "admission_type": []}
@@ -289,6 +324,7 @@ def main():
 
         st.subheader("Prediction output")
         st.metric("Predicted risk probability (P=High Risk)", f"{prob:.4f}")
+        render_risk_indicator(prob, threshold)
         st.write(f"**Risk band:** {risk_band(prob)}")
         st.write(f"**Predicted class (threshold={threshold:.2f}):** {'HIGH RISK (1)' if pred == 1 else 'LOW RISK (0)'}")
         st.caption("High/Low class is decided by: probability ≥ threshold.")

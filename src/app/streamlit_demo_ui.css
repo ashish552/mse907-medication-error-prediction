@@ -42,14 +42,17 @@ div[data-testid="stMetric"] {
     padding: 0.75rem !important;
     background-color: #f7faff !important;
     box-shadow: 0 4px 12px rgba(17, 63, 117, 0.1) !important;
+    
 }
 
 div[data-testid="stForm"] {
     border: 1px solid var(--demo-border) !important;
     border-radius: 14px !important;
-    padding: 1rem 1rem 0.6rem !important;
+    padding: 0.8rem 0.85rem 0.35rem !important;
     background-color: #ffffff !important;
     box-shadow: 0 10px 24px rgba(17, 63, 117, 0.1) !important;
+    max-width: 760px !important;
+    margin: 0 auto !important;
 }
 
 /* Inputs */
@@ -58,6 +61,24 @@ div[data-testid="stForm"] {
 [data-baseweb="textarea"] > div {
     border-color: #c3d8ff !important;
     border-radius: 10px !important;
+    min-height: 2.5rem !important;
+}
+
+div[data-testid="stForm"] [data-testid="stVerticalBlock"] {
+    gap: 0.45rem !important;
+}
+
+div[data-testid="stForm"] label {
+    font-size: 0.92rem !important;
+}
+
+div[data-testid="stForm"] [data-testid="stNumberInput"],
+div[data-testid="stForm"] [data-testid="stSelectbox"] {
+    margin-bottom: 0.15rem !important;
+}
+
+div[data-testid="stForm"] [data-testid="column"] {
+    gap: 0.5rem !important;
 }
 
 .stButton > button,
@@ -70,6 +91,10 @@ div[data-testid="stFormSubmitButton"] button {
     padding: 0.5rem 1.35rem !important;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
+div[data-testid="stFormSubmitButton"] {
+    margin-top: 0.35rem !important;
+}
+
 
 .stButton > button:hover,
 div[data-testid="stFormSubmitButton"] button:hover {
@@ -81,4 +106,128 @@ div[data-testid="stExpander"] {
     border: 1px solid var(--demo-border) !important;
     border-radius: 10px !important;
     background: #ffffffcc !important;
+}
+
+.risk-indicator-card {
+    border: 1px solid var(--demo-border);
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 10px 24px rgba(17, 63, 117, 0.08);
+    padding: 1rem 1rem 0.85rem;
+    margin: 0.5rem 0 1rem;
+}
+
+.risk-indicator-header,
+.risk-indicator-labels {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.risk-indicator-title {
+    font-weight: 700;
+    color: var(--demo-text);
+}
+
+.risk-indicator-band {
+    font-size: 0.92rem;
+    font-weight: 700;
+    padding: 0.22rem 0.65rem;
+    border-radius: 999px;
+}
+
+.risk-indicator-band-low {
+    background: #e8f7ee;
+    color: #166534;
+}
+
+.risk-indicator-band-medium {
+    background: #fff4db;
+    color: #9a6700;
+}
+
+.risk-indicator-band-high {
+    background: #fde7e9;
+    color: #b42318;
+}
+
+.risk-indicator-scale {
+    position: relative;
+    height: 18px;
+    border-radius: 999px;
+    margin: 1.1rem 0 0.75rem;
+    background: linear-gradient(90deg, #22c55e 0%, #facc15 50%, #ef4444 100%);
+    overflow: visible;
+}
+
+.risk-indicator-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    border-radius: 999px;
+    opacity: 0.28;
+    background: rgba(15, 39, 71, 0.18);
+}
+
+.risk-indicator-threshold,
+.risk-indicator-marker {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.risk-indicator-threshold {
+    font-size: 0.77rem;
+    color: #0f2747;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.risk-indicator-threshold-line {
+    width: 2px;
+    height: 30px;
+    background: #0f2747;
+}
+
+.risk-indicator-threshold-label {
+    white-space: nowrap;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.96);
+    padding: 0.1rem 0.35rem;
+    border-radius: 999px;
+    border: 1px solid var(--demo-border);
+}
+
+.risk-indicator-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.18rem;
+}
+
+.risk-indicator-dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 3px solid #ffffff;
+    background: #0f2747;
+    box-shadow: 0 4px 12px rgba(15, 39, 71, 0.2);
+}
+
+.risk-indicator-value {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #0f2747;
+    background: rgba(255, 255, 255, 0.96);
+    padding: 0.15rem 0.4rem;
+    border-radius: 999px;
+    border: 1px solid var(--demo-border);
+}
+
+.risk-indicator-labels {
+    color: #53657d;
+    font-size: 0.84rem;
+    font-weight: 600;
 }
